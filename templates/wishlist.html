@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My Wishlist</h2>
+
+<form method="POST" enctype="multipart/form-data">
+  <label for="product_name">Add Product:</label>
+  <input type="text" id="product_name" name="product_name" required>
+  <label for="image">Upload Image:</label>
+  <input type="file" id="image" name="image" accept="image/*">
+  <button type="submit">Add</button>
+</form>
+
+{% if wishlist_items %}
+  <ul class="wishlist">
+    {% for item in wishlist_items %}
+      <li>
+        <div>
+          {% if item[2] %}
+            <img src="{{ url_for('static', filename='uploads/' ~ item[2]) }}" alt="{{ item[1] }}" style="width: 100px; height: auto;">
+          {% endif %}
+          <p>{{ item[1] }}</p>
+        </div>
+        <form method="POST" action="{{ url_for('delete_wishlist_item', item_id=item[0]) }}" style="display:inline;">
+          <button type="submit" class="delete-btn">Remove</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Your wishlist is empty.</p>
+{% endif %}
+
+{% endblock %}
